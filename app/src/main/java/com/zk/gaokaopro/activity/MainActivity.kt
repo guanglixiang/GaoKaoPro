@@ -1,15 +1,21 @@
 package com.zk.gaokaopro.activity
 
+import android.util.Log
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.zk.gaokaopro.R
 import com.zk.gaokaopro.model.GKBaseBean
 import com.zk.gaokaopro.model.RecommendBean
+import com.zk.gaokaopro.model.request.RequestLogin
+import com.zk.gaokaopro.model.response.ResponseLogin
+import com.zk.gaokaopro.net.BaseHttpObserver
+import com.zk.gaokaopro.net.requestmanager.LoginManager
 import kotlinx.android.synthetic.main.activity_main.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
 class MainActivity : BaseActivity() {
+    val TAG: String = "MainActivity"
 
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         when (item.itemId) {
@@ -50,7 +56,6 @@ class MainActivity : BaseActivity() {
 
     override fun getIntentData() {
 
-
 //        ZKConnectionManager.getInstance().getApi()
     }
 
@@ -69,6 +74,19 @@ class MainActivity : BaseActivity() {
 
     override fun initData() {
 
-    }
+        //TODO for test
+        LoginManager.login(RequestLogin("sunny","1132")).subscribe(object : BaseHttpObserver<GKBaseBean<ResponseLogin>>(){
+            override fun onError(e: Throwable) {
+                Log.d(TAG,"onError")
+            }
 
+            override fun onNext(t: GKBaseBean<ResponseLogin>) {
+                Log.d(TAG,"xxxxxonNext")
+            }
+
+            override fun onComplete() {
+                Log.d(TAG,"onComplete")
+            }
+        })
+    }
 }
