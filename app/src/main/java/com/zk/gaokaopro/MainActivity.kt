@@ -28,6 +28,9 @@ class MainActivity : BaseActivity() {
     }
 
     override fun getIntentData() {
+
+
+//        ZKConnectionManager.getInstance().getApi()
     }
 
     override fun getViewModel() {
