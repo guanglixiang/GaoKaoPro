@@ -1,10 +1,11 @@
-package com.zk.gaokaopro
+package com.zk.gaokaopro.activity
 
 import android.Manifest
 import android.content.Intent
 import android.os.Handler
 import android.view.View
 import com.yanzhenjie.permission.AndPermission
+import com.zk.gaokaopro.R
 
 class SplashActivity : BaseActivity() {
 
@@ -72,16 +73,25 @@ class SplashActivity : BaseActivity() {
                 .permission(permissions)
                 .onGranted {
                     // Storage permission are allowed.
-                    splashHandler.sendEmptyMessageDelayed(FLAG_ENTER_MAIN, DELAY_TIME)
+                    splashHandler.sendEmptyMessageDelayed(
+                        FLAG_ENTER_MAIN,
+                        DELAY_TIME
+                    )
                 }
                 .onDenied {
 //                    toast(getString(R.string.question_permission_tip))
 //                    todo
-                    splashHandler.sendEmptyMessageDelayed(FLAG_ENTER_MAIN, DELAY_TIME)
+                    splashHandler.sendEmptyMessageDelayed(
+                        FLAG_ENTER_MAIN,
+                        DELAY_TIME
+                    )
                 }
                 .start()
         } else {
-            splashHandler.sendEmptyMessageDelayed(FLAG_ENTER_MAIN, DELAY_TIME)
+            splashHandler.sendEmptyMessageDelayed(
+                FLAG_ENTER_MAIN,
+                DELAY_TIME
+            )
         }
     }
 

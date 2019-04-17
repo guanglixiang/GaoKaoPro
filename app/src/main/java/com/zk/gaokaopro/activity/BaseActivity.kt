@@ -1,4 +1,4 @@
-package com.zk.gaokaopro
+package com.zk.gaokaopro.activity
 
 import android.os.Bundle
 import androidx.annotation.LayoutRes
