@@ -14,4 +14,5 @@ object UrlConfig {
     }
 
     const val URL_TEST = "test"
+    const val URL_RECOMMEND = "recommend"
 }
