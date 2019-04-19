@@ -1,16 +1,16 @@
 package com.zk.gaokaopro.activity
 
-import android.text.TextUtils
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
-import com.blankj.utilcode.util.ToastUtils
+import android.util.Log
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.zk.gaokaopro.GKConstant
 import com.zk.gaokaopro.R
+import com.zk.gaokaopro.model.RecommendBean
+import com.zk.gaokaopro.viewModel.BaseViewModel
 import com.zk.gaokaopro.viewModel.RecommendViewModel
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : BaseActivity() {
+
+    private val recommendViewModel = RecommendViewModel()
 
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         when (item.itemId) {
@@ -21,24 +21,31 @@ class MainActivity : BaseActivity() {
             R.id.navigation_dashboard -> {
                 message.text = "请求网络数据"
 
-                val viewModel = ViewModelProviders.of(this).get(RecommendViewModel::class.java)
-                viewModel.liveData.observe(this, Observer {
-                    if (it != null) {
-                        val errorCode = it.code
-                        if (errorCode == GKConstant.CODE_SUCCESS) {
-                            message.text = it.result.toString()
-//                            LiveDataBus.instance.getChannel(EventConstants.CONSULTATION_VIEW_COUNT_EVENT, RefreshData::class.java)
-//                                .postValue(refreshData)
-                            return@Observer
-                        }
+                recommendViewModel.setObserveListener(this, this, object : BaseViewModel.SuccessCallBack<ArrayList<RecommendBean>>{
+                    override fun success(result: ArrayList<RecommendBean>?) {
+                        message.text = result.toString()
+                        logD("哈哈哈")
                     }
-
-                    val msg = it.msg
-                    if (!TextUtils.isEmpty(msg))
-                        ToastUtils.showShort(msg)
                 })
+                recommendViewModel.requestData()
 
-                viewModel.requestData()
+
+//                val viewModel = ViewModelProviders.of(this).get(RecommendViewModel::class.java)
+//                viewModel.liveData.observe(this, Observer {
+//                    if (it != null) {
+//                        val errorCode = it.code
+//                        if (errorCode == GKConstant.CODE_SUCCESS) {
+//                            message.text = it.result.toString()
+////                            LiveDataBus.instance.getChannel(EventConstants.CONSULTATION_VIEW_COUNT_EVENT, RefreshData::class.java)
+////                                .postValue(refreshData)
+//                            return@Observer
+//                        }
+//                    }
+//                    val msg = it.msg
+//                    if (!TextUtils.isEmpty(msg))
+//                        ToastUtils.showShort(msg)
+//                })
+//                viewModel.requestData()
 
                 oldRequest()
 
@@ -50,6 +57,10 @@ class MainActivity : BaseActivity() {
             }
         }
         false
+    }
+
+    private fun logD(s: String) {
+        Log.d("TAG", s)
     }
 
     private fun oldRequest() {

@@ -9,5 +9,4 @@ class RecommendViewModel : BaseViewModel<ArrayList<RecommendBean>>() {
     override fun getObservable(): Observable<GKBaseBean<ArrayList<RecommendBean>>> {
         return gkApi.requestRecommend()
     }
-
 }
