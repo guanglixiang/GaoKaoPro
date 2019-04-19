@@ -12,4 +12,6 @@ interface GKApi {
 
     @GET(UrlConfig.URL_RECOMMEND)
     fun requestRecommend(): Call<GKBaseBean<ArrayList<RecommendBean>>>
+//    fun requestRecommend(): Observable<GKBaseBean<String>>
+
 }

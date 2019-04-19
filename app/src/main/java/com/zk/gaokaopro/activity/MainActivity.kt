@@ -1,9 +1,11 @@
 package com.zk.gaokaopro.activity
 
+import androidx.lifecycle.ViewModelProviders
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.zk.gaokaopro.R
 import com.zk.gaokaopro.model.GKBaseBean
 import com.zk.gaokaopro.model.RecommendBean
+import com.zk.gaokaopro.viewModel.RecommendViewModel
 import kotlinx.android.synthetic.main.activity_main.*
 import retrofit2.Call
 import retrofit2.Callback
@@ -20,6 +22,14 @@ class MainActivity : BaseActivity() {
             R.id.navigation_dashboard -> {
                 message.text = "请求网络数据"
 
+
+                val viewModel = ViewModelProviders.of(this).get(RecommendViewModel::class.java)
+
+//                viewModel.requestRecommend()
+
+//                questionDetailViewModel = ViewModelProviders.of(this).get(QuestionDetailViewModel::class.java)
+
+
                 gkApi.requestRecommend().enqueue(object : Callback<GKBaseBean<ArrayList<RecommendBean>>> {
                     override fun onFailure(call: Call<GKBaseBean<ArrayList<RecommendBean>>>, t: Throwable) {
                         message.text = t.message
@@ -27,7 +37,8 @@ class MainActivity : BaseActivity() {
 
                     override fun onResponse(
                         call: Call<GKBaseBean<ArrayList<RecommendBean>>>,
-                        response: Response<GKBaseBean<ArrayList<RecommendBean>>>) {
+                        response: Response<GKBaseBean<ArrayList<RecommendBean>>>
+                    ) {
                         message.text = response.body()!!.result.toString()
                     }
 
