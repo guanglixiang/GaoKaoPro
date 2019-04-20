@@ -9,15 +9,21 @@ import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
+import retrofit2.http.GET
+import retrofit2.http.Query
 
 interface GKApi {
 
     @GET(UrlConfig.URL_TEST)
-    fun requestTest(): Call<GKBaseBean<String>>
+//    fun requestTest(): Call<GKBaseBean<String>>
+    fun requestTest(): Observable<GKBaseBean<String>>
 
     @GET(UrlConfig.URL_RECOMMEND)
-    fun requestRecommend(): Call<GKBaseBean<ArrayList<RecommendBean>>>
+    fun requestRecommend(): Observable<GKBaseBean<ArrayList<RecommendBean>>>
 
     @POST(UrlConfig.URL_USER_LOGIN)
     fun login(@Body login: RequestLogin): Observable<GKBaseBean<ResponseLogin>>
+
+    @GET(UrlConfig.URL_TEST)
+    fun requestTestAddParams(@Query("id") id: String): Observable<GKBaseBean<String>>
 }

@@ -3,19 +3,19 @@ package com.zk.gaokaopro.activity
 import android.util.Log
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.zk.gaokaopro.R
-import com.zk.gaokaopro.model.GKBaseBean
 import com.zk.gaokaopro.model.RecommendBean
 import com.zk.gaokaopro.model.request.RequestLogin
 import com.zk.gaokaopro.model.response.ResponseLogin
 import com.zk.gaokaopro.net.BaseHttpObserver
 import com.zk.gaokaopro.net.requestmanager.LoginManager
+import com.zk.gaokaopro.viewModel.BaseViewModel
+import com.zk.gaokaopro.viewModel.RecommendViewModel
 import kotlinx.android.synthetic.main.activity_main.*
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 class MainActivity : BaseActivity() {
     val TAG: String = "MainActivity"
+
+    private val recommendViewModel = RecommendViewModel()
 
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         when (item.itemId) {
@@ -26,19 +26,33 @@ class MainActivity : BaseActivity() {
             R.id.navigation_dashboard -> {
                 message.text = "请求网络数据"
 
-                gkApi.requestRecommend().enqueue(object : Callback<GKBaseBean<ArrayList<RecommendBean>>> {
-                    override fun onFailure(call: Call<GKBaseBean<ArrayList<RecommendBean>>>, t: Throwable) {
-                        message.text = t.message
+                recommendViewModel.setObserveListener(this, this, object : BaseViewModel.SuccessCallBack<ArrayList<RecommendBean>>{
+                    override fun success(result: ArrayList<RecommendBean>?) {
+                        message.text = result.toString()
+                        logD("哈哈哈")
                     }
-
-                    override fun onResponse(
-                        call: Call<GKBaseBean<ArrayList<RecommendBean>>>,
-                        response: Response<GKBaseBean<ArrayList<RecommendBean>>>) {
-                        message.text = response.body()!!.result.toString()
-                    }
-
                 })
+                recommendViewModel.requestData()
 
+
+//                val viewModel = ViewModelProviders.of(this).get(RecommendViewModel::class.java)
+//                viewModel.liveData.observe(this, Observer {
+//                    if (it != null) {
+//                        val errorCode = it.code
+//                        if (errorCode == GKConstant.CODE_SUCCESS) {
+//                            message.text = it.result.toString()
+////                            LiveDataBus.instance.getChannel(EventConstants.CONSULTATION_VIEW_COUNT_EVENT, RefreshData::class.java)
+////                                .postValue(refreshData)
+//                            return@Observer
+//                        }
+//                    }
+//                    val msg = it.msg
+//                    if (!TextUtils.isEmpty(msg))
+//                        ToastUtils.showShort(msg)
+//                })
+//                viewModel.requestData()
+
+                oldRequest()
 
                 return@OnNavigationItemSelectedListener true
             }
@@ -48,6 +62,27 @@ class MainActivity : BaseActivity() {
             }
         }
         false
+    }
+
+    private fun logD(s: String) {
+        Log.d("TAG", s)
+    }
+
+    private fun oldRequest() {
+        //旧的网络层使用方法
+        //                gkApi.requestRecommend().enqueue(object : Callback<GKBaseBean<ArrayList<RecommendBean>>> {
+        //                    override fun onFailure(call: Call<GKBaseBean<ArrayList<RecommendBean>>>, t: Throwable) {
+        //                        message.text = t.message
+        //                    }
+        //
+        //                    override fun onResponse(
+        //                        call: Call<GKBaseBean<ArrayList<RecommendBean>>>,
+        //                        response: Response<GKBaseBean<ArrayList<RecommendBean>>>
+        //                    ) {
+        //                        message.text = response.body()!!.result.toString()
+        //                    }
+        //
+        //                })
     }
 
     override fun getContentViewId(): Int {
